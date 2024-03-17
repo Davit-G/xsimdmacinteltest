@@ -43,4 +43,4 @@ jobs:
     - name: build
       id: build
       run: |
-        cmake --build "${{matrix.folder}}" --config Release --target all --
+        cmake --build "${{matrix.folder}}" --config Release
