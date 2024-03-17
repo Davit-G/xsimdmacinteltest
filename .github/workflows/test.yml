@@ -1,0 +1,46 @@
+name: xsimd test build
+
+on:
+  push:
+    paths:
+      - '*'
+  pull_request:
+    paths:
+      - '*'
+    branches:
+      - master
+
+jobs:
+  build:
+    name: build
+    strategy:
+      matrix:
+        include:
+        - {
+            name: "Mac Intel (x86_64)",
+            os: macos-13,
+            compiler: "Xcode",
+            folder: "build_mac"
+          }
+    runs-on: ${{ matrix.os }}
+    concurrency: build_${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: (mac) select xcode version
+      if: startsWith(matrix.os, 'macos')
+      id: xcode_version
+      run: |
+        sudo xcode-select -s '/Applications/Xcode_15.1.app/Contents/Developer'
+
+    - name: configure
+      if: ${{ !startsWith(matrix.os, 'windows') }}
+      id: configure
+      run: |
+        cmake -B "${{matrix.folder}}" -G "${{matrix.compiler}}"
+
+    - name: build
+      id: build
+      run: |
+        cmake --build "${{matrix.folder}}" --config Release --target all --
