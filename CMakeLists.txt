@@ -14,7 +14,7 @@ FetchContent_MakeAvailable (xsimd)
 
 
 #indicate the entry point for the executable
-add_executable (CMakeHelloWorld Hello HelloWorld.cpp)
+add_executable (CMakeHelloWorld HelloWorld.cpp)
 
 target_link_libraries(CMakeHelloWorld PRIVATE
     xsimd
